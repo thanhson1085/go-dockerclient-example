@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/fsouza/go-dockerclient"
+	"github.com/thanhson1085/go-dockerclient"
 )
 
 func main() {
@@ -14,14 +14,14 @@ func main() {
 		fmt.Println(img.ID, img.RepoTags)
 	}
 	// top
-	top, _ := client.TopContainer("fc5bfefc175c", "aux")
+	top, _ := client.TopContainer("7d1e304579e4", "aux")
 	fmt.Println(top.Titles)
 	for _, p := range top.Processes {
 		fmt.Println(p)
 	}
 	statsOption := docker.StatsOptions{}
 	stats := make(chan *docker.Stats)
-	statsOption.ID = "fc5bfefc175c"
+	statsOption.ID = "7d1e304579e4"
 	statsOption.Stream = true
 	statsOption.Stats = stats
 	done := make(chan bool)
@@ -36,7 +36,7 @@ func main() {
 		if !ok {
 			break
 		}
-		fmt.Println("Network Stats", s.Network)
+		fmt.Println("Network Stats", s.Networks["eth0"])
 		fmt.Println("Memory Stats", s.MemoryStats)
 	}
 }
