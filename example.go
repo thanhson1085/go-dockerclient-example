@@ -3,10 +3,14 @@ package main
 import (
 	"fmt"
 	"github.com/thanhson1085/go-dockerclient"
+	"os"
 )
 
 func main() {
-	endpoint := "http://192.168.1.191:12375"
+	args := os.Args
+	endpoint := args[1]    //"http://192.168.1.191:12375"
+	containerId := args[2] //7d1e304579e4
+
 	client, _ := docker.NewClient(endpoint)
 	// list of images
 	imgs, _ := client.ListImages(docker.ListImagesOptions{All: false})
@@ -14,14 +18,14 @@ func main() {
 		fmt.Println(img.ID, img.RepoTags)
 	}
 	// top
-	top, _ := client.TopContainer("7d1e304579e4", "aux")
+	top, _ := client.TopContainer(containerId, "aux")
 	fmt.Println(top.Titles)
 	for _, p := range top.Processes {
 		fmt.Println(p)
 	}
 	statsOption := docker.StatsOptions{}
 	stats := make(chan *docker.Stats)
-	statsOption.ID = "7d1e304579e4"
+	statsOption.ID = containerId
 	statsOption.Stream = true
 	statsOption.Stats = stats
 	done := make(chan bool)
